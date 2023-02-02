@@ -8,7 +8,7 @@ USER_EXIST=$($PSQL "SELECT username FROM users where username='$USER';")
 if [[ -z $USER_EXIST ]]
 then
   echo "Welcome, $USER! It looks like this is your first time here."
-  $PSQL "INSERT INTO users(username, games_played,best_game) values('$USER', 0, 1000);" | sed 's/Insert 0 1//'
+  $PSQL "INSERT INTO users(username, games_played) values('$USER', 0);" | sed 's/Insert 0 1//'
 else
   GAMES_PLAYED=$($PSQL "select games_played from users where username='$USER';")
   BEST_GAME=$($PSQL "select best_game from users where username='$USER';")
@@ -42,7 +42,7 @@ done
 
 BEST_GAME=$($PSQL "select best_game from users where username='$USER';")
 GAMES_PLAYED=$($PSQL "select games_played from users where username='$USER';")
-if [[ $BEST_GAME -gt $ROUND ]]
+if [[ $BEST_GAME -gt $ROUND || -z $BEST_GAME ]]
 then
   echo $ROUND
   $PSQL "update users set best_game=$ROUND where username='$USER';" | sed "s/UPDATE 1//"
