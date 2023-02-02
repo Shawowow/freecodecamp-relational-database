@@ -13,6 +13,7 @@ else
   GAMES_PLAYED=$($PSQL "select games_played from users where username='$USER';")
   BEST_GAME=$($PSQL "select best_game from users where username='$USER';")
   echo "Welcome back, $USER! You have played $GAMES_PLAYED games, and your best game took $BEST_GAME guesses."
+ #echo "Welcome back, $USER! You have played $GAMES_PLAYED games, and your best game took $BEST_GAME guesses."
   
 fi
 
@@ -27,16 +28,20 @@ done
 
 until [[ $GUESS -eq $RAND ]]
 do
-  if [[ $GUESS -lt $RAND ]]
+  if [[ $GUESS -lt $RAND && $GUESS =~ ^[0-9]*$ ]]
   then
     echo "It's lower than that, guess again:"
-    ((ROUND++))
     read GUESS
-  elif [[ $GUESS -gt $RAND ]]
+    ((ROUND++))
+  elif [[ $GUESS -gt $RAND && $GUESS =~ ^[0-9]*$ ]]
   then
     echo "It's higher than that, guess again:"
-    ((ROUND++))
     read GUESS
+    ((ROUND++))
+  else
+    echo That is not an integer, guess again:
+    read GUESS
+    ((ROUND++))
   fi  
 done
 
