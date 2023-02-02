@@ -12,9 +12,8 @@ then
 else
   GAMES_PLAYED=$($PSQL "select games_played from users where username='$USER';")
   BEST_GAME=$($PSQL "select best_game from users where username='$USER';")
+  #echo "Welcome back, $USER! You have played $GAMES_PLAYED games, and your best game took $BEST_GAME guesses."
   echo "Welcome back, $USER! You have played $GAMES_PLAYED games, and your best game took $BEST_GAME guesses."
- #echo "Welcome back, $USER! You have played $GAMES_PLAYED games, and your best game took $BEST_GAME guesses."
-  
 fi
 
 echo "Guess the secret number between 1 and 1000:"
@@ -49,7 +48,6 @@ BEST_GAME=$($PSQL "select best_game from users where username='$USER';")
 GAMES_PLAYED=$($PSQL "select games_played from users where username='$USER';")
 if [[ $BEST_GAME -gt $ROUND || -z $BEST_GAME ]]
 then
-  echo $ROUND
   $PSQL "update users set best_game=$ROUND where username='$USER';" | sed "s/UPDATE 1//"
 fi
 $PSQL "update users set games_played=$GAMES_PLAYED+1 where username='$USER';" | sed "s/UPDATE 1//"
